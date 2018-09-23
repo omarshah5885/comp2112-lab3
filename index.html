@@ -120,7 +120,7 @@
 <script src="https://yui-s.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
 <script>
 // create a function that returns all the email selectors in the DOM e.g., avatar, name, subject, etc.
-function captureEmailSelectors() {
+captureEmailSelectors = () => {
   return {
     avatars: Array.from( document.querySelectorAll('.email-avatar') ),
     names: Array.from( document.querySelectorAll('.email-name') ),
@@ -130,11 +130,12 @@ function captureEmailSelectors() {
 };
 
 // dynamically replace each selector to the new values from the fetched emails array
-function replaceEmailValues(emailSelectors, emails ) {
+replaceEmailValues(emailSelectors, emails ) = () => {
   emailSelectors.avatars.map( (avatar, index) => avatar.src = emails[index].image );
   emailSelectors.names.map( (name, index) => name.textContent = emails[index].name );
   emailSelectors.subjects.map( (subject, index) => subject.textContent = emails[index].subject );
-  emailSelectors.descrips.map( (descrip, index) => descrip.textContent = emails[index].desc );               }; 
+  emailSelectors.descrips.map( (descrip, index) => descrip.textContent = emails[index].desc );               
+  }; 
 
 
 fetch('https://my.api.mockaroo.com/emails.json?key=7251a1d0')
