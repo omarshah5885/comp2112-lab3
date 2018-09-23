@@ -175,7 +175,7 @@ fetch('https://my.api.mockaroo.com/emails.json?key=7251a1d0')
           compose.addEventListener('click', () => {
             if(captureEmailSelectors().avatars.length >= 2 && captureEmailSelectors().avatars.length < 7) {
               // insert the dummy snippet to the inbox 
-              inbox.insertAdjacentHTML('beforeend', snippet);
+              setTimeout(() => inbox.insertAdjacentHTML('beforeend', snippet), 2000); 
 
               // re-capture the selectors in newly added DOM and re-run the map method to replace DOM values
               replaceEmailValues(captureEmailSelectors(), emails);
