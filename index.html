@@ -119,58 +119,74 @@
 
 <script src="https://yui-s.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
 <script>
-    fetch('https://my.api.mockaroo.com/emails.json?key=7251a1d0')
+// create a function that returns all the email selectors in the DOM e.g., avatar, name, subject, etc.
+function captureEmailSelectors() {
+  return {
+    avatars: Array.from( document.querySelectorAll('.email-avatar') ),
+    names: Array.from( document.querySelectorAll('.email-name') ),
+    subjects: Array.from( document.querySelectorAll('.email-subject') ),
+    descrips: Array.from( document.querySelectorAll('.email-desc') )                
+  }
+};
+
+// dynamically replace each selector to the new values from the fetched emails array
+function replaceEmailValues(emailSelectors, emails ) {
+  emailSelectors.avatars.map( (avatar, index) => avatar.src = emails[index].image );
+  emailSelectors.names.map( (name, index) => name.textContent = emails[index].name );
+  emailSelectors.subjects.map( (subject, index) => subject.textContent = emails[index].subject );
+  emailSelectors.descrips.map( (descrip, index) => descrip.textContent = emails[index].desc );               }; 
+
+
+fetch('https://my.api.mockaroo.com/emails.json?key=7251a1d0')
         .then(response => response.json())
         .then(emails => {
-            // create an object that houses all the selectors for the avatar, email name, subject and description
-            let emailSelector = {
-                avatars: Array.from( document.querySelectorAll('.email-avatar') ),
-                names: Array.from( document.querySelectorAll('.email-name') ),
-                subjects: Array.from( document.querySelectorAll('.email-subject') ),
-                descrips: Array.from( document.querySelectorAll('.email-desc') )                
-            };
-            // dynamically replace each selector to the fetched email array 
-            emailSelector.avatars.map( (avatar, index) => avatar.src = emails[index].image );
-            emailSelector.names.map( (name, index) => name.textContent = emails[index].name );
-            emailSelector.subjects.map( (subject, index) => subject.textContent = emails[index].subject );
-            emailSelector.descrips.map( (descrip, index) => descrip.textContent = emails[index].desc );
-            // GOAL: create a new '.email-item' div element to the inbox area on click of compose. 
+          // call the functions that capture the email selectors and replaces them w/ new API values 
+          replaceEmailValues(captureEmailSelectors(), emails);
+          
+          // GOAL: create a new '.email-item' div element to the inbox area on click of compose. 
 
-            // create counter to keep track of additional emails added to inbox, starting at an index of 2
-            let counter = 2;
+          // first, create counter to keep track of additional emails added to inbox, starting at an index of 2
+          let counter = 2;
 
-            // first create a div snippet w/ same class names as other emails
-            let snippet = `
+          // first create a div snippet that represents an email
+          let snippet = `
             <div class="email-item email-item-unread pure-g">
-                <div class="pure-u">
-                    <img width="64" height="64" alt="Eric Ferraiuolo&#x27;s avatar" class="email-avatar" src="${emails[counter].image}">
-                </div>
-    
-                <div class="pure-u-3-4">
-                    <h5 class="email-name">${emails[counter].name}</h5>
-                    <h4 class="email-subject">${emails[counter].subject}</h4>
-                    <p class="email-desc">
-                        ${emails[counter].desc}
-                    </p>
-                </div>
+            <div class="pure-u">
+            <img width="64" height="64" alt="${emails[counter].name}'s avatar" class="email-avatar" src="${emails[counter].image}">
+            </div>
+
+            <div class="pure-u-3-4">
+            <h5 class="email-name">${emails[counter].name}</h5>
+            <h4 class="email-subject">${emails[counter].subject}</h4>
+            <p class="email-desc">
+            ${emails[counter].desc}
+            </p>
+            </div>
             </div>`;
 
-            // target the compse button
-            const compose = document.querySelector('.primary-button');
+          // target the compse button
+          const compose = document.querySelector('.primary-button');
 
-            // target the area of the dom to add snippet
-            const inbox = document.querySelector('#list');
-             
-            // set an 'if' statement to add snippet to dom upon click if the selectors are less than 2 
-            compose.addEventListener('click', () => {
-                if(emailSelector.avatars.length >= 2 && emailSelector.avatars.length < 8) {
-                inbox.insertAdjacentHTML('beforeend', snippet);
-                console.log(emailSelector.avatars.length); // read as 2 despite adding to dom
-                counter++;
-                }
-            });
+          // target the area of the dom to add snippet i.e., #list
+          const inbox = document.querySelector('#list');
+
+          // set an 'if' statement to add snippet to dom upon click if the selectors are less than 2 
+          compose.addEventListener('click', () => {
+            if(captureEmailSelectors().avatars.length >= 2 && captureEmailSelectors().avatars.length <= 7) {
+              // insert the dummy snippet to the inbox 
+              inbox.insertAdjacentHTML('beforeend', snippet);
+
+              // re-capture the selectors in newly added DOM and re-run the map method to replace DOM values
+              replaceEmailValues(captureEmailSelectors(), emails);
+              console.log(captureEmailSelectors().avatars.length); 
+              counter++;  
+
+            }
+            else return;
+          });
 
         });
+
 
 </script>
 
