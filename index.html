@@ -172,7 +172,7 @@ fetch('https://my.api.mockaroo.com/emails.json?key=7251a1d0')
 
           // set an 'if' statement to add snippet to dom upon click if the selectors are less than 2 
           compose.addEventListener('click', () => {
-            if(captureEmailSelectors().avatars.length >= 2 && captureEmailSelectors().avatars.length <= 7) {
+            if(captureEmailSelectors().avatars.length >= 2 && captureEmailSelectors().avatars.length < 7) {
               // insert the dummy snippet to the inbox 
               inbox.insertAdjacentHTML('beforeend', snippet);
 
@@ -182,7 +182,7 @@ fetch('https://my.api.mockaroo.com/emails.json?key=7251a1d0')
               counter++;  
 
             }
-            else return;
+            else console.log("no more emails to add");
           });
 
         });
