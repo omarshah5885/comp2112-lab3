@@ -130,7 +130,7 @@ captureEmailSelectors = () => {
 };
 
 // dynamically replace each selector to the new values from the fetched emails array
-replaceEmailValues(emailSelectors, emails ) = () => {
+replaceEmailValues = (emailSelectors, emails ) => {
   emailSelectors.avatars.map( (avatar, index) => avatar.src = emails[index].image );
   emailSelectors.names.map( (name, index) => name.textContent = emails[index].name );
   emailSelectors.subjects.map( (subject, index) => subject.textContent = emails[index].subject );
